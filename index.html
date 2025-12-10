@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Hero Section - Distinct Delays</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom Font */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* --- NEW ANIMATION LOGIC (Distinct & Slow) --- */
+
+        @keyframes slideUpFade {
+            0% {
+                opacity: 0;
+                transform: translateY(60px); /* Start 60px down */
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal-element {
+            opacity: 0; /* Hidden by default */
+            animation: slideUpFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Distinct Time Steps */
+        .delay-1 { animation-delay: 0.2s; } /* Nav */
+        .delay-2 { animation-delay: 0.6s; } /* Badge */
+        .delay-3 { animation-delay: 1.0s; } /* Headline */
+        .delay-4 { animation-delay: 1.4s; } /* Text */
+        .delay-5 { animation-delay: 1.8s; } /* Buttons */
+        .delay-6 { animation-delay: 2.2s; } /* Visual */
+        .delay-7 { animation-delay: 2.6s; } /* Logos */
+
+        /* --- Other Effects --- */
+
+        /* Continuous Float for the image wrapper */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating-wrapper {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes pulseGradient {
+            0% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+            100% { opacity: 0.3; transform: scale(1); }
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            animation: pulseGradient 8s infinite ease-in-out;
+        }
+
+        /* 3D Card Effect Container */
+        .card-container {
+            perspective: 1000px;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
+        }
+
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative">
+
+    <!-- Background Blobs -->
+    <div class="hero-blob bg-indigo-600/30 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="hero-blob bg-purple-600/30 w-96 h-96 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3"></div>
+
+    <!-- Navigation (Delay 1: 0.2s) -->
+    <nav class="w-full py-6 px-6 md:px-12 flex justify-between items-center z-50 reveal-element delay-1">
+        <!-- Logo -->
+        <div class="flex items-center gap-2 font-bold text-2xl tracking-tighter">
+            <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                <i data-lucide="zap" class="text-white w-5 h-5"></i>
+            </div>
+            <span>Anim<span class="text-indigo-400">Wait</span>.</span>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+            <a href="#" class="hover:text-white transition-colors">Products</a>
+            <a href="#" class="hover:text-white transition-colors">Solutions</a>
+            <a href="#" class="hover:text-white transition-colors">Developers</a>
+            <a href="#" class="hover:text-white transition-colors">Pricing</a>
+        </div>
+
+        <!-- CTA & Mobile Menu Button -->
+        <div class="flex items-center gap-4">
+            <a href="#" class="hidden md:block text-sm font-medium hover:text-white text-slate-300 transition-colors">Sign In</a>
+            <button class="bg-white text-slate-900 px-5 py-2 rounded-full text-sm font-semibold hover:bg-slate-200 transition-transform active:scale-95 shadow-lg shadow-indigo-500/20">
+                Get Started
+            </button>
+            <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-slate-900/95 z-40 hidden flex-col items-center justify-center gap-8 opacity-0 transition-opacity duration-300">
+        <a href="#" class="text-2xl font-medium">Products</a>
+        <a href="#" class="text-2xl font-medium">Solutions</a>
+        <a href="#" class="text-2xl font-medium">Pricing</a>
+        <button class="absolute top-6 right-6" onclick="toggleMobileMenu()">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+    </div>
+
+    <!-- Main Hero Content -->
+    <main class="flex-grow flex items-center justify-center px-6 md:px-12 py-12 md:py-20 max-w-7xl mx-auto w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            
+            <!-- Left Column: Text Content -->
+            <div class="flex flex-col gap-6 text-center lg:text-left z-10">
+                
+                <!-- Badge (Delay 2: 0.6s) -->
+                <div class="reveal-element delay-2 flex justify-center lg:justify-start">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-medium tracking-wide uppercase">
+                        <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                        v2.0 Now Available
+                    </span>
+                </div>
+
+                <!-- Headline (Delay 3: 1.0s) -->
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight reveal-element delay-3">
+                    Design with <br />
+                    <span class="text-gradient">Motion & Soul.</span>
+                </h1>
+
+                <!-- Subheadline (Delay 4: 1.4s) -->
+                <p class="text-slate-400 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto lg:mx-0 reveal-element delay-4">
+                    Create immersive web experiences that captivate your audience. We help you build the future of the web with smooth animations and responsive layouts.
+                </p>
+
+                <!-- Buttons (Delay 5: 1.8s) -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4 reveal-element delay-5">
+                    <button class="group relative px-8 py-4 bg-indigo-600 rounded-xl font-semibold text-white overflow-hidden shadow-xl shadow-indigo-600/30 hover:shadow-indigo-600/50 transition-all hover:-translate-y-1">
+                        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                        <span class="relative flex items-center gap-2">
+                            Start Building 
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </button>
+                    
+                    <button class="px-8 py-4 rounded-xl font-semibold text-white border border-slate-700 hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 group">
+                        <i data-lucide="play-circle" class="w-5 h-5 text-indigo-400 group-hover:scale-110 transition-transform"></i>
+                        Watch Demo
+                    </button>
+                </div>
+
+                <!-- Social Proof (Delay 7: 2.6s) -->
+                <div class="pt-8 reveal-element delay-7 border-t border-slate-800/50 mt-4">
+                    <p class="text-sm text-slate-500 mb-4 uppercase tracking-widest text-center lg:text-left">Trusted by teams at</p>
+                    <div class="flex gap-6 justify-center lg:justify-start opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                        <svg class="h-6" viewBox="0 0 100 30" fill="currentColor"><path d="M10,15 L20,5 L30,15 L20,25 Z M40,5 H90 V25 H40 Z" /></svg>
+                        <svg class="h-6" viewBox="0 0 100 30" fill="currentColor"><circle cx="15" cy="15" r="10"/> <rect x="35" y="5" width="50" height="20"/></svg>
+                        <svg class="h-6" viewBox="0 0 100 30" fill="currentColor"><rect x="5" y="5" width="20" height="20"/> <rect x="35" y="10" width="60" height="10"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Visual (Delay 6: 2.2s) -->
+            <div class="card-container relative hidden lg:block reveal-element delay-6" id="hero-visual">
+                <!-- Floating Wrapper handled by separate div -->
+                <div class="floating-wrapper">
+                    
+                    <!-- Main Glass Card -->
+                    <div class="glass-card p-6 rounded-2xl relative shadow-2xl">
+                        <!-- Decorative Header UI -->
+                        <div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
+                            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                            <div class="ml-auto bg-white/10 px-2 py-1 rounded text-xs text-slate-300">dashboard.tsx</div>
+                        </div>
+
+                        <!-- Abstract Content Representation -->
+                        <div class="space-y-4">
+                            <div class="flex gap-4">
+                                <div class="w-1/3 h-32 bg-indigo-500/20 rounded-lg animate-pulse"></div>
+                                <div class="w-2/3 h-32 bg-purple-500/20 rounded-lg">
+                                    <div class="h-full w-full flex items-center justify-center">
+                                        <div class="bg-gradient-to-tr from-indigo-500 to-purple-600 w-16 h-16 rounded-xl flex items-center justify-center shadow-lg">
+                                            <i data-lucide="bar-chart-2" class="text-white w-8 h-8"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="h-4 bg-slate-700/50 rounded w-3/4"></div>
+                            <div class="h-4 bg-slate-700/50 rounded w-1/2"></div>
+                            
+                            <!-- Stat Row -->
+                            <div class="grid grid-cols-3 gap-4 mt-6">
+                                <div class="bg-slate-800/50 p-3 rounded-lg text-center">
+                                    <div class="text-indigo-400 font-bold text-xl">+12%</div>
+                                    <div class="text-xs text-slate-500">Growth</div>
+                                </div>
+                                <div class="bg-slate-800/50 p-3 rounded-lg text-center">
+                                    <div class="text-purple-400 font-bold text-xl">8.4k</div>
+                                    <div class="text-xs text-slate-500">Users</div>
+                                </div>
+                                <div class="bg-slate-800/50 p-3 rounded-lg text-center">
+                                    <div class="text-pink-400 font-bold text-xl">99%</div>
+                                    <div class="text-xs text-slate-500">Uptime</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Badge Notification -->
+                        <div class="absolute -right-6 -top-6 bg-white text-slate-900 p-4 rounded-xl shadow-xl animate-bounce" style="animation-duration: 3s;">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-green-100 p-2 rounded-full text-green-600">
+                                    <i data-lucide="check" class="w-4 h-4"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-500">Status</div>
+                                    <div class="text-sm font-bold">Optimization Complete</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Background Decorative Card (Layered) -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl transform rotate-6 scale-95 -z-10 opacity-30 blur-sm"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+                setTimeout(() => menu.classList.remove('opacity-0'), 10);
+            } else {
+                menu.classList.add('opacity-0');
+                setTimeout(() => {
+                    menu.classList.remove('flex');
+                    menu.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Parallax Effect Logic (Applied to the card)
+        const heroVisual = document.querySelector('.glass-card');
+        const container = document.querySelector('.card-container');
+
+        if(container && heroVisual) {
+            container.addEventListener('mousemove', (e) => {
+                // Calculate mouse position relative to center of screen
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                // Apply rotation
+                heroVisual.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+
+            container.addEventListener('mouseenter', (e) => {
+                heroVisual.style.transition = 'none'; // Instant movement on enter
+            });
+
+            container.addEventListener('mouseleave', (e) => {
+                heroVisual.style.transition = 'transform 0.5s ease'; // Smooth reset on leave
+                heroVisual.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            });
+        }
+    </script>
+</body>
+</html>
